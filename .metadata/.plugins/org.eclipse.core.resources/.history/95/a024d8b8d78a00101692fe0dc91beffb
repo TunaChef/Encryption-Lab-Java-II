@@ -1,0 +1,85 @@
+package encryption;
+
+import java.util.Scanner;
+
+public class Encryptor {
+
+	public static String encryptWord(String word) {
+		if(word == null || word.isEmpty()) {
+			throw new IllegalArgumentException("Word cannot be null or empty.");
+		}
+		
+		//Convert word to lowercase
+		word = word.toLowerCase();
+		
+		//If word is a number
+		if(word.matches("\\d+")) {
+			int number = Integer.parseInt(word);
+			return String.valueOf(number + 2501);
+		}
+		
+		//If word is alphabetic
+		if(word.matches("[a-zA-Z]+")) {
+			int length = word.length();
+			
+			//Single letter case
+			if(length == 1) {
+				
+				char ch = word.charAt(0);
+				
+				//uses Unicode to subtract the value of the character with 'a' and go forward (+1), then using modulo to wrap around after z and then re-add the unicode value
+				char nextLetter = (char)((ch - 'a' + 1) % 26 + 'a');
+				return String.valueOf(nextLetter);
+				
+			}
+			
+			//Even length word with modular division
+			if(length % 2 == 0) {
+				StringBuilder enc = new StringBuilder();
+				
+				for(int i = 0; i < length; i+=2) { 	//for loop iterates by 2 to go to each pairing of two letters and then switches them
+					enc.append(word.charAt(i + 1));	//append the forward letter
+					enc.append(word.charAt(i));		//then add the initial letter
+				}
+				
+				return enc.toString();	//return the string
+			}
+			else {
+				return word.charAt(length - 1) + word.substring(1, length - 1) + word.charAt(0);
+			}
+		}
+		
+		throw new IllegalArgumentException("Invalid word: must contain only letters or numbers!!!");
+	}
+	
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("Would you like to encrypt text? (yes/no)");
+		String nextWord = scanner.nextLine().trim().toLowerCase();
+		
+		//Loop if user types "yes"
+		while(nextWord.matches(".*(yes|yea|yeah|mhm|please|sure).*")) {
+			System.out.println("Enter a line of text to encrypt:");
+			String line = scanner.nextLine();
+			
+			String[] words = line.split("\\s+");	//split words into list with spaces regex
+			
+			//Use string builder to encrypt all words in user response
+			StringBuilder encryptedText = new StringBuilder();
+			for (String word : words) {
+				encryptedText.append(encryptWord(word)).append(" ");
+			}
+			
+			//Print
+			System.out.println("Encrypted text: " + encryptedText);
+			
+			//Ask if again
+			System.out.println("Would you like to encrypt more text?");
+			nextWord = scanner.nextLine().trim().toLowerCase();
+		}
+		System.out.println("\nThank you for using the encryptor! Bye");
+		scanner.close();
+	}
+
+}
