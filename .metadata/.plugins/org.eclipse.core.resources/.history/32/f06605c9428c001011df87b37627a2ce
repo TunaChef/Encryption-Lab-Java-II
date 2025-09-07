@@ -2,7 +2,6 @@ package encryption;
 
 import java.util.Scanner;
 
-
 public class Encryptor {
 
 	public static String encryptWord(String word) {
