@@ -2,6 +2,13 @@ package encryption;
 
 import java.util.Scanner;
 
+/**
+ * Encryption - Class to encrypt string with basic rules
+ *
+ * @author Ryon Edwards
+ * @copyright Howard Community College 2025
+ * @version 1.0
+ */
 
 public class Encryptor {
 
